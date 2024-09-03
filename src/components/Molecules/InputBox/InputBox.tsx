@@ -14,7 +14,7 @@ const InputBox = (props: InputBoxProps) => {
   return (
     <div className={style.main}>
       <h3>{label}</h3>
-      <Input />
+      <Input value={value} setValue={setValue}/>
     </div>
   )
 }

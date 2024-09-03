@@ -6,12 +6,17 @@ import InputBox from "@/components/Molecules/InputBox/InputBox";
 import { useState } from "react";
 import SelectBox from "@/components/Molecules/SelectBox/SelectBox";
 import { listaGeneri } from "@/constants/common";
+import Button from "@/components/Atoms/Button/Button";
 
 export default function Home() {
   const [protagonista, setProtagonista] = useState("");
   const [antagonista, setAntagonista] = useState("");
+  const [genere, setGenere] = useState("");
 
-  const [genere, setGenere] = useState("")
+  const handleGenerate = () => {
+    console.log({protagonista, antagonista, genere})
+  }
+
 
   return (
     <>
@@ -38,10 +43,17 @@ export default function Home() {
               />
             </div>
             <div className={style.container}>
-              <SelectBox
-              label="ora vediamo"
-              list={listaGeneri}/>
+              <SelectBox label="Genere:" list={listaGeneri} setValue={setGenere}/>
             </div>
+            <Button
+            label="Genera"
+            onClick={handleGenerate}
+            disabled={
+              protagonista.trim().length <= 0 ||
+                antagonista.trim().length <= 0 ||
+                genere.trim().length <= 0
+            }
+            />
           </WindowBox>
         </div>
       </main>

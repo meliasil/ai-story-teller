@@ -1,9 +1,12 @@
-import style from "./Input.module.scss";
 import { useState } from "react";
+import style from "./Input.module.scss";
 
-const Input = () => {
-  const [value, setValue] = useState("");
+interface InputProps {
+  value: string;
+  setValue: (value: string) => void;
+}
 
+const Input = ({ value, setValue }: InputProps) => {
   return (
     <input
       className={style.box}

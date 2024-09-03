@@ -1,33 +1,22 @@
-import { ChangeEvent } from "react";
 import style from "./Select.module.scss";
+import { ListOption } from "@/types/common";
 
-const Select = () => {
-  const options = [
-    {
-      label: "label 1",
-      value: "value 1",
-    },
-    {
-      label: "label 2",
-      value: "value 2",
-    },
-  ];
+interface SelectProps {
+    list: ListOption[];
+    setValue: (value: string) => void;
+}
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
-  };
-
-  return (
-    <div className={style.main}>
-      <select onChange={handleChange}>
-        {options.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
+const Select = ({ list, setValue }: SelectProps) => {
+    return (
+        <select className={style.select} onChange={(e) => setValue(e.target.value)}>
+            {list.map((option) => (
+                <option key={option.value} value={option.value}>
+                    {option.label}
+                </option>
+            ))}
+        </select>
+    );
+}
 
 export default Select;
+
