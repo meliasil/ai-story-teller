@@ -1,8 +1,4 @@
 .main {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    box-shadow: 0px 5px 5px #2524224d;
-    border: 1px solid #baac97;
+    @include window-style(200px);
+    @include standard-animation();
 }

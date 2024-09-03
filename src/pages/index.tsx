@@ -15,7 +15,9 @@ export default function Home() {
       <main className={style.main}>
         <Header title="AI Story Teller" />
         <div className={style.content}>
-          <WindowBox title="Story Params" />
+          <WindowBox title="Story Params">
+            <p>finalmente ha dei figli</p>
+          </WindowBox>
         </div>
       </main>
     </>
