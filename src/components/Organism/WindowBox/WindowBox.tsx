@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import style from "./WindowBox.module.scss";
+import InputBox from "@/components/Molecules/InputBox/InputBox";
 
 interface WindowBoxProps {
   title?: string;
@@ -8,10 +9,12 @@ interface WindowBoxProps {
 
 const WindowBox = (props: WindowBoxProps) => {
   const { title, children } = props;
-  return <div className={style.main}>
-    {title && <h2>{title}</h2>}
-    {children}
-  </div>;
+  return (
+    <div className={style.main}>
+      {title && <h2>{title}</h2>}
+      {children}
+    </div>
+  );
 };
 
 export default WindowBox;

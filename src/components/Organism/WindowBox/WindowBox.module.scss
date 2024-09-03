@@ -1,4 +1,7 @@
 .main {
     @include window-style(200px);
-    @include standard-animation();
+
+    h2{
+        margin-bottom: rem(10px);
+    }
 }

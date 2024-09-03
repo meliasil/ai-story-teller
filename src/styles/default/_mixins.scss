@@ -7,9 +7,8 @@
     border: 1px solid #baac97;
 }
 
-
-@mixin standard-animation() {
-    -webkit-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-}
+@mixin standard-animation($duration: 0.2s) {
+    -webkit-transition: all $duration ease-in-out;
+    -o-transition: all $duration ease-in-out;
+    transition: all $duration ease-in-out;
+  }
