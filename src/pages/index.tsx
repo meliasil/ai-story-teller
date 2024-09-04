@@ -1,5 +1,5 @@
 import Head from "next/head";
-import style from "@/styles/Home.module.css";
+import style from "@/styles/Home.module.scss";
 import Header from "@/components/Molecules/Header/Header";
 import WindowBox from "@/components/Organism/WindowBox/WindowBox";
 import InputBox from "@/components/Molecules/InputBox/InputBox";
@@ -7,14 +7,35 @@ import { useState } from "react";
 import SelectBox from "@/components/Molecules/SelectBox/SelectBox";
 import { listaGeneri } from "@/constants/common";
 import Button from "@/components/Atoms/Button/Button";
+import { GenerateContentCandidate, GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function Home() {
   const [protagonista, setProtagonista] = useState("");
   const [antagonista, setAntagonista] = useState("");
   const [genere, setGenere] = useState("");
 
-  const handleGenerate = () => {
-    console.log({protagonista, antagonista, genere})
+  const [response, setResponse] = useState("");
+
+  const handleGenerate = async () => {
+    
+    const prompt = `genera un racconto ${genere} con protagonista ${protagonista} e antagonista ${antagonista}`
+
+
+    if (process.env.NEXT_PUBLIC_GEMINI_KEY) {
+      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_KEY);
+
+      const model = genAI.getGenerativeModel({model: "gemini-1.5-flash"});
+
+      const result = await model.generateContent(prompt);
+
+      const output = (
+        result.response.candidates as GenerateContentCandidate[]
+      )[0].content.parts[0].text;
+
+      if (output) {
+        setResponse(output)
+      }
+    }
   }
 
 
@@ -54,6 +75,9 @@ export default function Home() {
                 genere.trim().length <= 0
             }
             />
+            <div className={style.result}>
+              {response}
+            </div>
           </WindowBox>
         </div>
       </main>

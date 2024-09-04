@@ -1,5 +1,6 @@
 .main {
-    @include window-style(200px);
+    @include window-style();
+    
 
     h2{
         margin-bottom: rem(10px);

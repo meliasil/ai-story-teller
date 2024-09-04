@@ -8,13 +8,19 @@ interface SelectProps {
 
 const Select = ({ list, setValue }: SelectProps) => {
     return (
+        <div className={style.main}>
         <select className={style.select} onChange={(e) => setValue(e.target.value)}>
-            {list.map((option) => (
+            
+                <option value="" hidden>
+                seleziona
+              </option>
+              {list.map((option) => (
                 <option key={option.value} value={option.value}>
                     {option.label}
                 </option>
             ))}
         </select>
+        </div>
     );
 }
 
