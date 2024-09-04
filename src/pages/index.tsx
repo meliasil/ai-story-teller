@@ -22,7 +22,11 @@ export default function Home() {
 
   const [pegi18, setPegi18] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const handleGenerate = async () => {
+    setLoading(true);
+
     const prompt = `genera un racconto ${genere} con protagonista ${protagonista} e antagonista ${antagonista}`;
 
     if (process.env.NEXT_PUBLIC_GEMINI_KEY) {
@@ -39,6 +43,8 @@ export default function Home() {
       if (output) {
         setResponse(output);
       }
+
+      setLoading(false);
     }
   };
 
@@ -73,6 +79,11 @@ export default function Home() {
                 setValue={setGenere}
               />
             </div>
+            <SwitchBox
+              label="Per adulti:"
+              value={pegi18}
+              setValue={setPegi18}
+            />
             <Button
               label="Genera"
               onClick={handleGenerate}
@@ -82,12 +93,13 @@ export default function Home() {
                 genere.trim().length <= 0
               }
             />
-            <SwitchBox
-              label="Per adulti:"
-              value={pegi18}
-              setValue={setPegi18}
-            />
-            <div className={style.result}>{response}</div>
+            {loading ? (
+              <div className={style.loading}>
+                <p>loading...</p>
+              </div>
+            ) : (
+              <div className={style.result}>{response}</div>
+            )}
           </WindowBox>
         </div>
       </main>
