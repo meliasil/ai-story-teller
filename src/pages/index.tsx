@@ -7,7 +7,11 @@ import { useState } from "react";
 import SelectBox from "@/components/Molecules/SelectBox/SelectBox";
 import { listaGeneri } from "@/constants/common";
 import Button from "@/components/Atoms/Button/Button";
-import { GenerateContentCandidate, GoogleGenerativeAI } from "@google/generative-ai";
+import {
+  GenerateContentCandidate,
+  GoogleGenerativeAI,
+} from "@google/generative-ai";
+import SwitchBox from "@/components/Molecules/SwitchBox/SwitchBox";
 
 export default function Home() {
   const [protagonista, setProtagonista] = useState("");
@@ -16,15 +20,15 @@ export default function Home() {
 
   const [response, setResponse] = useState("");
 
-  const handleGenerate = async () => {
-    
-    const prompt = `genera un racconto ${genere} con protagonista ${protagonista} e antagonista ${antagonista}`
+  const [pegi18, setPegi18] = useState(false);
 
+  const handleGenerate = async () => {
+    const prompt = `genera un racconto ${genere} con protagonista ${protagonista} e antagonista ${antagonista}`;
 
     if (process.env.NEXT_PUBLIC_GEMINI_KEY) {
       const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_KEY);
 
-      const model = genAI.getGenerativeModel({model: "gemini-1.5-flash"});
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const result = await model.generateContent(prompt);
 
@@ -33,11 +37,10 @@ export default function Home() {
       )[0].content.parts[0].text;
 
       if (output) {
-        setResponse(output)
+        setResponse(output);
       }
     }
-  }
-
+  };
 
   return (
     <>
@@ -64,20 +67,27 @@ export default function Home() {
               />
             </div>
             <div className={style.container}>
-              <SelectBox label="Genere:" list={listaGeneri} setValue={setGenere}/>
+              <SelectBox
+                label="Genere:"
+                list={listaGeneri}
+                setValue={setGenere}
+              />
             </div>
             <Button
-            label="Genera"
-            onClick={handleGenerate}
-            disabled={
-              protagonista.trim().length <= 0 ||
+              label="Genera"
+              onClick={handleGenerate}
+              disabled={
+                protagonista.trim().length <= 0 ||
                 antagonista.trim().length <= 0 ||
                 genere.trim().length <= 0
-            }
+              }
             />
-            <div className={style.result}>
-              {response}
-            </div>
+            <SwitchBox
+              label="Per adulti:"
+              value={pegi18}
+              setValue={setPegi18}
+            />
+            <div className={style.result}>{response}</div>
           </WindowBox>
         </div>
       </main>
