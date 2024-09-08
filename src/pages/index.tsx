@@ -53,8 +53,14 @@ export default function Home() {
     
     
     setLoading(false);
-
   };
+
+const handleVoice = () => {
+  const  utterance = new SpeechSynthesisUtterance(response);
+  utterance.lang = "it-IT";
+
+  speechSynthesis.speak(utterance)
+}
 
   return (
     <>
@@ -110,7 +116,10 @@ export default function Home() {
                 <p>loading...</p>
               </div>
             ) : (
-              <div className={style.result}>{response}</div>
+              <div className={style.result}>
+                <div className={style.btn}><Button label="Racconta" onClick={handleVoice}/>
+                </div>
+                {response}</div>
             )}
           </WindowBox>
         </div>
