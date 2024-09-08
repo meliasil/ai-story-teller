@@ -12,6 +12,8 @@ import {
   GoogleGenerativeAI,
 } from "@google/generative-ai";
 import SwitchBox from "@/components/Molecules/SwitchBox/SwitchBox";
+import Toast from "@/components/Atoms/Toast/Toast";
+
 
 export default function Home() {
   const [protagonista, setProtagonista] = useState("");
@@ -46,7 +48,10 @@ export default function Home() {
             body: JSON.stringify({prompt})
           });
           const data = await response.json();
-          setResponse(data);
+          if (!data.ok) {
+            throw new Error("errore")
+          }
+          setResponse(data.message);
         } catch (e) {
           console.error("il nostro errore:", e)
           setError(true)
@@ -86,6 +91,15 @@ const handleStopVoice = () => {
       <main className={style.main}>
         <Header title="AI Story Teller" />
         <div className={style.content}>
+          {
+            error && (
+            <Toast 
+            setAction={setError} 
+            title="Errore" 
+            message="Errore nella creazione del racconto"
+            />
+          )}
+      
           <WindowBox title="Story Params">
             <div className={style.container}>
               <InputBox
@@ -120,9 +134,7 @@ const handleStopVoice = () => {
                 genere.trim().length <= 0
               }
             />
-          </div>
-
-          {error && <p>errore nella generazione</p>}
+          </div> 
 
             {loading && (
               <div className={style.loading}>
