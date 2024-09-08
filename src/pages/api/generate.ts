@@ -38,8 +38,10 @@ export default async function handler(
         if (output) {
             res.status(200).json(output);
         }
+        } else {
+            res.status(400).json("errore nella generazione"); 
         }
-      } catch {
+      } catch (e) {
         res.status(400).json("errore nella generazione");
       }
   
