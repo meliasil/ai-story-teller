@@ -25,6 +25,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const handleGenerate = async () => {
     setLoading(true);
     setError(false);
@@ -58,9 +60,20 @@ export default function Home() {
 const handleVoice = () => {
   const  utterance = new SpeechSynthesisUtterance(response);
   utterance.lang = "it-IT";
-
+  setIsPlaying(true);
   speechSynthesis.speak(utterance)
+
+  utterance.onend = () => {
+    setIsPlaying(false)
+  }
 }
+
+const handleStopVoice = () => {
+  
+  speechSynthesis.cancel();
+  setIsPlaying(false);
+}
+
 
   return (
     <>
@@ -111,15 +124,22 @@ const handleVoice = () => {
 
           {error && <p>errore nella generazione</p>}
 
-            {loading ? (
+            {loading && (
               <div className={style.loading}>
                 <p>loading...</p>
               </div>
-            ) : (
+            )}
+            { !loading && response && (
               <div className={style.result}>
-                <div className={style.btn}><Button label="Racconta" onClick={handleVoice}/>
+                <div className={style.btn}>
+                  {isPlaying ? (
+                    <Button label="Stop" onClick={handleStopVoice}/>
+                  ) : (
+                    <Button label="Racconta" onClick={handleVoice}/>
+                  )}                  
                 </div>
-                {response}</div>
+                {response}
+                </div>
             )}
           </WindowBox>
         </div>
