@@ -23,29 +23,37 @@ export default function Home() {
   const [pegi18, setPegi18] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
+    setError(false);
 
     const prompt = `genera un racconto ${genere} con protagonista ${protagonista} e antagonista ${antagonista}`;
 
-    if (process.env.NEXT_PUBLIC_GEMINI_KEY) {
-      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_KEY);
 
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      const result = await model.generateContent(prompt);
-
-      const output = (
-        result.response.candidates as GenerateContentCandidate[]
-      )[0].content.parts[0].text;
-
-      if (output) {
-        setResponse(output);
+      if (
+        protagonista.trim().length > 0 &&
+        antagonista.trim().length > 0 &&
+        genere.trim().length > 0
+      ) {
+        try {
+          const response = await fetch ('/api/generate', {
+            headers: {"Content-Type": "application/json"},
+            method: "POST",
+            body: JSON.stringify({prompt})
+          });
+          const data = await response.json();
+          setResponse(data);
+        } catch (e) {
+          console.error("il nostro errore:", e)
+          setError(true)
+        }
       }
+    
+    
+    setLoading(false);
 
-      setLoading(false);
-    }
   };
 
   return (
@@ -78,7 +86,7 @@ export default function Home() {
                 list={listaGeneri}
                 setValue={setGenere}
               />
-            </div>
+            
             <SwitchBox
               label="Per adulti:"
               value={pegi18}
@@ -93,6 +101,10 @@ export default function Home() {
                 genere.trim().length <= 0
               }
             />
+          </div>
+
+          {error && <p>errore nella generazione</p>}
+
             {loading ? (
               <div className={style.loading}>
                 <p>loading...</p>
@@ -105,4 +117,5 @@ export default function Home() {
       </main>
     </>
   );
-}
+  }
+
